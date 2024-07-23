@@ -14,6 +14,7 @@ high_score = 0
 pass_pipe = True
 screen = pygame.display.set_mode((width,height), pygame.RESIZABLE)
 pygame.display.set_caption('Flappy Bird')
+
 font = pygame.font.SysFont('Bauhaus 93', 20)
 font_gameover = pygame.font.SysFont('Bauhaus 93', 10)
 white = (255,255,255)
@@ -34,10 +35,12 @@ silver = pygame.image.load('silver.png')
 bronze = pygame.image.load('bronze.png')
 start_over = pygame.image.load('startover.png')
 def draw_text(text, font, text_col,x ,y):
+    """ draw text """
     img = font.render(text, True, text_col)
     screen.blit(img, (x,y))
 
 def reset():
+    """ rest score and bird position when hitting reset button """
     pipe_group.empty()
     flappy.rect.x = 30
     flappy.rect.y = int(height/2)
@@ -45,7 +48,9 @@ def reset():
     return score
 
 class Bird(pygame.sprite.Sprite):
+    """ defining bird model """
     def __init__(self,x,y):
+        """ changing bird model """
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         self.index = 0
@@ -59,7 +64,7 @@ class Bird(pygame.sprite.Sprite):
         self.vel = 0
 
     def update(self):\
-
+        """ defining bird flying's physics """
         rate = 5
         if speed == 2:
             if self.counter > rate:
@@ -88,6 +93,7 @@ class Bird(pygame.sprite.Sprite):
                 self.clicked = False
 
 class Pipe(pygame.sprite.Sprite):
+    """ defining pipe """
     def __init__(self,x,y, position):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('pipebot.png')
@@ -98,6 +104,7 @@ class Pipe(pygame.sprite.Sprite):
         if position == -1:
             self.rect.topleft  = [x,y + int(gap/2)]
     def update(self):
+        """ update current position of pipe and erase the pipe when passing the left side of the screen """
         if game_over == False:
             if flying == False:
                 self.rect.x -= 10000
@@ -105,11 +112,13 @@ class Pipe(pygame.sprite.Sprite):
             if self.rect.right<0:
                 self.kill()
 class Button():
+    """ defining reset button """
     def __init__(self,x,y,image):
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = (x,y)
     def draw(self):
+        """ drawing button when game over and identify when the button is pressed """
         action = False
         pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(pos):
